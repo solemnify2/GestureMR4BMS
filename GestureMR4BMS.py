@@ -1,5 +1,5 @@
 # Hand Gesture Controlled Mixed Reality for Falcon BMS
-# Author: Hong Yeon Kim
+# Author: Hong Yeon Kim (solemnify@gmail.com)
 # Date: 2024.06.10
 #
 
