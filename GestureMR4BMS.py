@@ -41,9 +41,7 @@ def on_press(key):
 listener = Listener(on_press=on_press)
 listener.start()
 
-print(f"Press <ESC> to stop.")
-
-while running and cap.isOpened():
+while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
