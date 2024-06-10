@@ -11,7 +11,14 @@ import time
 # MediaPipe hands Module Initialization
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-HAND_TIMEOUT = 5
+
+# Hand detection smoothness. If you increase, MR_Cover off sensitiveness will be reduced
+DETECT_SMOOTH = 5  
+
+# (CONFIG) Specify the region for hand detection within the video. 
+#  Hands outside this region will be ignored. 
+#  0: top of the screen, 1: bottom of the screen. 0.6 is slightly below the halfway point. 
+DETECT_ROI = 0.6
 
 # Keyboard Controller Initialization
 keyboard = Controller()
@@ -43,11 +50,9 @@ while cap.isOpened():
 
             # x, y, z coordinate 
             # print(f"x: {wrist_x:.2f}, y: {wrist_y:.2f}, z: {wrist_z:.2f}")
-            
-            # (CONFIG) Specify the region for hand detection within the video. 
-            #  Hands outside this region will be ignored. 
-            #  0: top of the screen, 1: bottom of the screen. 0.6 is slightly below the halfway point. 
-            if wrist_y > 0.6:
+
+            # Check if hand is within ROI
+            if wrist_y > DETECT_ROI:
                 landmarks = landmarks + 1
                 if mr_cover == 0:                   # Immediate MR_Cover on as soon as any hands detected
                     keyboard.press(Key.shift)       # Keycode for mapping.
@@ -55,12 +60,12 @@ while cap.isOpened():
                     keyboard.release('1')
                     keyboard.release(Key.shift)
                 
-                mr_cover = HAND_TIMEOUT    # Delay time for MR_Cover off
+                mr_cover = DETECT_SMOOTH    # Set watermark to maximul immediate
                 break
 
     # If no hands detected or outside detection region
     if landmarks == 0:  
-        mr_cover = max(mr_cover-1,0)    # Count-down
+        mr_cover = max(mr_cover-1,0)    # Count-down watermark slowly
 
         # MR_Cover off after some delay to prevent hand detection noise
         if mr_cover == 1:
