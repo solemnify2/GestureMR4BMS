@@ -21,7 +21,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 
 2. **Install the Required Libraries**
    ```bash
-    python GestureMR4BMS.py
+   pip install opencv-python mediapipe pynput
 
 ## Usage
 1. **Run the Script before BMS launch**
