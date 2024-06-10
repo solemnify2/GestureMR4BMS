@@ -55,7 +55,7 @@ while cap.isOpened():
                     keyboard.release('1')
                     keyboard.release(Key.shift)
                 
-                mr_cover = min(mr_cover+1, HAND_TIMEOUT)    # Delay time for MR_Cover off
+                mr_cover = HAND_TIMEOUT    # Delay time for MR_Cover off
                 break
 
     # If no hands detected or outside detection region
