@@ -18,7 +18,9 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 [GestureMR4BMS.py
 ](https://github.com/solemnify2/GestureMR4BMS/blob/main/GestureMR4BMS.py)
 
-3. **Install the Required Libraries**
+2. **Install Python**
+
+3. **Install the Required Python Libraries**
    ```bash
    pip install opencv-python mediapipe pynput
 
