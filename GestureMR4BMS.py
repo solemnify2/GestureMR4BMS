@@ -1,4 +1,4 @@
-# Hand Gesture Controlled Mixed Reality for Falcon BMS
+# Hand Gesture Controlled Mixed Reality for Falcon BMS (GestureMR4BMS.py)
 # Author: Hong Yeon Kim (solemnify@gmail.com)
 # Date: 2024.06.10
 #
