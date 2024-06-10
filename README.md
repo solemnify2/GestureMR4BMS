@@ -30,8 +30,10 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 1. **Run the Script before BMS launch**
    ```bash
    python GestureMR4BMS.py
-   
-2. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
+
+2. **Run Falcon BMS as usual**
+
+3. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
 That's all.
 
 ## How It Works
