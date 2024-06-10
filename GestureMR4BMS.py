@@ -60,10 +60,10 @@ while cap.isOpened():
                     keyboard.release('1')
                     keyboard.release(Key.shift)
                 
-                mr_cover = DETECT_SMOOTH    # Set watermark to maximul immediate
+                mr_cover = DETECT_SMOOTH    # Set watermark to maximum immediately (high sensitiveness)
                 break
 
-    # If no hands detected or outside detection region
+    # If no hands detected or hands outside detection ROI
     if landmarks == 0:  
         mr_cover = max(mr_cover-1,0)    # Count-down watermark slowly
 
