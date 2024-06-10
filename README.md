@@ -14,10 +14,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - Pynput
 
 ## Installation
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/solemnify2/GestureMR4BMS.git
-   cd GestureMR4BMS
+1. **Download GestureMR4BMS.py**
 
 2. **Install the Required Libraries**
    ```bash
