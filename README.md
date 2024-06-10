@@ -25,7 +25,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    ```bash
    pip install opencv-python mediapipe pynput
 
-5. **Install and adjust Web Camera:** 
+5. **Install and adjust Web Camera:** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located.
 
 ## Usage
 1. **Run the Script before BMS launch**
