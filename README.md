@@ -17,5 +17,29 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 ## Installation
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/FalconBMSHandGestureControl.git
-   cd FalconBMSHandGestureControl
+   git clone https://github.com/solemnify2/GestureMR4BMS.git
+   cd GestureMR4BMS
+
+2. **Install the Required Libraries**
+   ```bash
+    python GestureMR4BMS.py
+
+## Usage
+1. **Run the Script**
+   ```bash
+   python hand_gesture_control.py
+   
+2. **Gesture to Toggle MR**
+- The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS.
+
+## How It Works
+- **Hand Tracking**: The program uses MediaPipe to track hand landmarks in real-time through the webcam.
+- **MR Toggle**: When the gesture is detected, a simulated keyboard input (pressing 'shift D1') is sent to toggle the MR Cover in Falcon BMS.
+
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
