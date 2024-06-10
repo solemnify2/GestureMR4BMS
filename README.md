@@ -16,8 +16,8 @@ Pynput
 
 Installation
 Clone the Repository
-git clone https://github.com/yourusername/FalconBMSHandGestureControl.git
-cd FalconBMSHandGestureControl
+git clone https://github.com/solemnify2/GestureMR4BMS
+cd GestureMR4BMS
 
 
 Install the Required Libraries
