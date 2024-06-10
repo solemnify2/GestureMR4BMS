@@ -15,8 +15,8 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 
 ## Installation
 1. **Download GestureMR4BMS.py**
-
-GestureMR4BMS.py
+[GestureMR4BMS.py
+](https://github.com/solemnify2/GestureMR4BMS/blob/main/GestureMR4BMS.py)
 
 3. **Install the Required Libraries**
    ```bash
