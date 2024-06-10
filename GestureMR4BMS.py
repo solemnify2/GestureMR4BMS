@@ -1,11 +1,11 @@
-# Hand Gesture Controlled Mixed Reality for Falcon BMS (GestureMR4BMS.py)
+# Hand Gesture Controlled Mixed Reality for Falcon BMS
 # Author: Hong Yeon Kim (solemnify@gmail.com)
 # Date: 2024.06.10
 #
 
 import cv2
 import mediapipe as mp
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Key, Listener, Controller
 import time
 
 # MediaPipe hands Module Initialization
@@ -27,7 +27,23 @@ DETECT_SMOOTH = 5
 #  0: top of the screen, 1: bottom of the screen. 0.6 is slightly below the halfway point. 
 DETECT_ROI = 0.6
 
-while cap.isOpened():
+# Flag to control the loop
+running = True
+
+# Function to handle keyboard interrupts
+def on_press(key):
+    global running
+    if key == Key.esc:
+        running = False
+        return True
+
+# Start keyboard listener
+listener = Listener(on_press=on_press)
+listener.start()
+
+print(f"Press <ESC> to stop.")
+
+while running and cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
@@ -60,10 +76,10 @@ while cap.isOpened():
                     keyboard.release('1')
                     keyboard.release(Key.shift)
                 
-                mr_cover = DETECT_SMOOTH    # Set watermark to maximum immediately (high sensitiveness)
+                mr_cover = DETECT_SMOOTH    # Set watermark to maximul immediate
                 break
 
-    # If no hands detected or hands outside detection ROI
+    # If no hands detected or outside detection region
     if landmarks == 0:  
         mr_cover = max(mr_cover-1,0)    # Count-down watermark slowly
 
@@ -74,10 +90,6 @@ while cap.isOpened():
             keyboard.release('1')
             keyboard.release(Key.shift)
 
-    if cv2.waitKey(5) & 0xFF == 27:
-       break
-
 # Release resources
 cap.release()
-cv2.destroyAllWindows()
 hands.close()
