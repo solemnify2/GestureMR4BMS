@@ -12,6 +12,13 @@ import time
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
+# Keyboard Controller Initialization
+keyboard = Controller()
+
+# Webcam Initialization
+cap = cv2.VideoCapture(0)
+mr_cover = 0
+
 # Hand detection smoothness. If you increase, MR_Cover off sensitiveness will be reduced
 DETECT_SMOOTH = 5  
 
@@ -19,13 +26,6 @@ DETECT_SMOOTH = 5
 #  Hands outside this region will be ignored. 
 #  0: top of the screen, 1: bottom of the screen. 0.6 is slightly below the halfway point. 
 DETECT_ROI = 0.6
-
-# Keyboard Controller Initialization
-keyboard = Controller()
-
-# Webcam Initialization
-cap = cv2.VideoCapture(0)
-mr_cover = 0
 
 while cap.isOpened():
     ret, frame = cap.read()
