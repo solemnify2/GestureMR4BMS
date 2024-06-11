@@ -21,7 +21,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 2. **Install Python** You may visit [https://python.org
 ](https://www.python.org/) to download installation package.
 
-4. **Install the Required Python Libraries** Open a command prompt window in Windows and enter the following:.
+4. **Install the Required Python Libraries** Open a command prompt window in Windows and enter the following:
    ```bash
    pip install opencv-python mediapipe pynput
 
