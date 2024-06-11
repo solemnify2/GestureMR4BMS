@@ -33,13 +33,17 @@ Or, You can run from source code as following.
    ```bash
    pip install opencv-python mediapipe pynput
    ```
-
 5. **Install and adjust Web Camera:** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located.
 
-## Usage
-1. **Run the Script before BMS launch**
+6. **Run the Script before BMS launch**
    ```bash
    python GestureMR4BMS.py
+   ```
+
+## Usage
+1. **Run GestureMR4BMS.exe before BMS launch**
+   ```bash
+   GestureMR4BMS.exe
    ```
 
 2. **Run Falcon BMS as usual**
