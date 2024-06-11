@@ -13,42 +13,14 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - MediaPipe
 - Pynput
 
-## Installation
-
-Simple way to run
-
-1. **Download** Pre-built [Latest Release](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.1/GestureMR4BMS-v0.0.1.exe). There is no installation package yet.
-2. **Just Run it**
-
-Or, You can run from source code as following.
-
-1. **Download**
-[GestureMR4BMS.py
-](https://github.com/solemnify2/GestureMR4BMS/blob/main/GestureMR4BMS.py) from this site.
-
-2. **Install Python** You may visit [https://python.org
-](https://www.python.org/) to download installation package.
-
-4. **Install the Required Python Libraries** Open a command prompt window in Windows and enter the following:
-   ```bash
-   pip install opencv-python mediapipe pynput
-   ```
-5. **Install and adjust Web Camera:** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located.
-
-6. **Run the Script before BMS launch**
-   ```bash
-   python GestureMR4BMS.py
-   ```
-
 ## Usage
-1. **Run GestureMR4BMS.exe before BMS launch**
-   ```bash
+1. **Download** Pre-built [Latest Release](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.1/GestureMR4BMS-v0.0.1.exe). There is no installation package yet.
+2. **Run downloaded GestureMR4BMS.exe before BMS launch**
+   ```
    GestureMR4BMS.exe
    ```
-
-2. **Run Falcon BMS as usual**
-
-3. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
+3. **Run Falcon BMS as usual**
+4. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
 That's all.
 
 ## Tips
