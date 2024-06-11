@@ -24,6 +24,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 4. **Install the Required Python Libraries** Open a command prompt window in Windows and enter the following:
    ```bash
    pip install opencv-python mediapipe pynput
+   ```
 
 5. **Install and adjust Web Camera:** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located.
 
@@ -31,6 +32,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 1. **Run the Script before BMS launch**
    ```bash
    python GestureMR4BMS.py
+   ```
 
 2. **Run Falcon BMS as usual**
 
@@ -43,7 +45,7 @@ That's all.
    ![camera installation](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/078c2136-c10b-462d-a8b5-429b905813cf)
 Currently, the program is hardcoded to recognize hands only in the lower part of the camera feed. If you want to change this region, modify the source code accordingly. The following source code contains logic to trigger MR Cover if the hand is located at 60% or more of the y-coordinate in the video feed. Change this value to a suitable one.
 
-   ```
+   ```python
    if wrist.y > 0.6:
       keyboard.press('1')
       :
