@@ -41,7 +41,6 @@ That's all.
 
 1. **Camera Position** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located. When seated and reaching your hand towards the MFD, the camera should be positioned so that your hand appears in the lower half of the video feed. Using a camera recording program to check where your hand appears in the video is a good way to ensure proper installation. The current setup is configured to recognize hands only in the lower half of the video feed. The upper half of the video feed is likely occupied by your HOTAS, and hand detection is disabled in this area to avoid false positives.
    ![camera installation](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/078c2136-c10b-462d-a8b5-429b905813cf)
-
 Currently, the program is hardcoded to recognize hands only in the lower part of the camera feed. If you want to change this region, modify the source code accordingly. The following source code contains logic to trigger MR Cover if the hand is located at 60% or more of the y-coordinate in the video feed. Change this value to a suitable one.
 
    ```
