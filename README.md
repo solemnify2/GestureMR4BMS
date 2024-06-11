@@ -8,11 +8,8 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - **MR Control**: Toggles the MR Cover in Falcon BMS based on recognized hand gestures.
 
 ## Requirements
-- Python 3.x
-- OpenCV
-- MediaPipe
-- Pynput
-
+- none
+  
 ## Usage
 1. **Download** Pre-built [Latest Release](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.1/GestureMR4BMS-v0.0.1.exe). There is no installation package yet.
 2. **Run downloaded GestureMR4BMS.exe before BMS launch**
