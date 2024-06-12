@@ -12,8 +12,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
   
 ## Usage
 1. **Download Pre-built GestureMR4BMS executable**  
-   [GUI Version](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.4/GestureMR4BMSGUI-v0.0.4.exe)
-   [Command Line Version (will be deprecated soon)](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.3/GestureMR4BMS-v0.0.3.exe).  
+   [Newest Version](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.4/GestureMR4BMSGUI-v0.0.4.exe)
    There is no installer yet.
 2. **Run downloaded executable before BMS launch**
 3. **Adjust camera posiiton and detection area**
