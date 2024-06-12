@@ -11,7 +11,7 @@ import time
 # MediaPipe hands Module Initialization
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-HAND_TIMEOUT = 5
+MR_WATERMARK = 5   # MR Cover On Watermark. 
 
 # Keyboard Controller Initialization
 keyboard = Controller()
@@ -61,14 +61,15 @@ while cap.isOpened():
                     keyboard.press('1')
                     keyboard.release('1')
                     keyboard.release(Key.shift)
-                    print(f"\rMR Cover On !!!", end="") 
-                
-                mr_cover = min(mr_cover+1, HAND_TIMEOUT)    # Delay time for MR_Cover off
+
+                    print(f"\rHand detected!!! ", end="") 
+
+                mr_cover = MR_WATERMARK             # high watermark immediately, when any hands detected
                 break
 
     # If no hands detected or outside detection region
     if landmarks == 0:  
-        mr_cover = max(mr_cover-1,0)    # Count-down
+        mr_cover = max(mr_cover-1,0)    # Count-down slowly
 
         # MR_Cover off after some delay to prevent hand detection noise
         if mr_cover == 1:
@@ -76,10 +77,8 @@ while cap.isOpened():
             keyboard.press('1')
             keyboard.release('1')
             keyboard.release(Key.shift)
-            print(f"\rMR Cover Off!!!", end="") 
-
-    if cv2.waitKey(5) & 0xFF == 27:
-       break
+            
+            print(f"\rNo Hand detected.", end="") 
 
 # Release resources
 cap.release()
