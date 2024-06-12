@@ -11,11 +11,11 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - none
   
 ## Usage
-1. **Download Pre-built [GestureMR4BMS.exe](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.3/GestureMR4BMS-v0.0.3.exe). There is no installer yet.**
-2. **Run downloaded GestureMR4BMS.exe before BMS launch**
-   ```
-   GestureMR4BMS.exe
-   ```
+1. **Download Pre-built GestureMR4BMS executable**
+   [Command Line Version](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.3/GestureMR4BMS-v0.0.3.exe).
+   [GUI Version](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.4/GestureMR4BMSGUI-v0.0.4.exe).
+   There is no installer yet.
+2. **Run downloaded executable before BMS launch**
 3. **Run Falcon BMS as usual**
 4. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
 That's all.
