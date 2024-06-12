@@ -52,6 +52,7 @@ def mr_cover_off():
 
 def detect_hand():
     global running, show_feed, threshold_y, mr_cover
+    global toogle_feed_var
     
     print("detect thread start")
 
@@ -79,7 +80,9 @@ def detect_hand():
                     wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
                     if mr_cover == 0:                   # Immediate MR_Cover on as soon as any hands detected
                         mr_cover_on()
-                        print(f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}, show_feed {show_feed}")
+                        video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}", image='')
+
+                        print()
                         
                     mr_cover = MR_WATERMARK             # high watermark immediately, when any hands detected
 
@@ -99,7 +102,7 @@ def detect_hand():
             # MR_Cover off after some delay to prevent hand detection noise
             if mr_cover == 1:
                 mr_cover_off()
-                print(f"No Hand detected.") 
+                video_label.config(text="No hand detected", image='')
 
         if show_feed:
             # Draw detection area on the frame
@@ -110,8 +113,8 @@ def detect_hand():
             imgtk = ImageTk.PhotoImage(image=img)
             video_label.imgtk = imgtk
             video_label.configure(image=imgtk)
-
-        time.sleep(0.5)  # Slow down
+            
+        time.sleep(0.2)  # Slow down
 
     print("detect thread stop")
 
@@ -171,9 +174,12 @@ def quit_program():
 
     root.quit()
 
+def show_about():
+    messagebox.showinfo("About", "GestureMR4BMS Version 0.0.5\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+
 # Tkinter GUI setup
 root = tk.Tk()
-root.title("GestureMR4BMS")
+root.title(f"GestureMR4BMS")
 
 root.protocol('WM_DELETE_WINDOW', hide_window)
 
@@ -188,28 +194,28 @@ start_button.pack(side=tk.LEFT, padx=5)
 stop_button = tk.Button(button_frame, text="Stop", command=stop_detection)
 stop_button.pack(side=tk.LEFT, padx=5)
 
+threshold_label = tk.Label(button_frame, text="Detection Area (Y-coordinate %):")
+threshold_label.pack(side=tk.LEFT, padx=5)
+
+threshold_slider = tk.Scale(button_frame, from_=0, to=100, orient=tk.HORIZONTAL, command=update_threshold, showvalue=False)
+threshold_slider.set(threshold_y * 100)
+threshold_slider.pack(side=tk.LEFT, padx=5)
+
+toggle_feed_var = tk.BooleanVar()
+toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
+toggle_feed_switch.pack(side=tk.LEFT, padx=5)
+
+about_button = tk.Button(button_frame, text="About", command=show_about)
+about_button.pack(side=tk.LEFT, padx=5)
+
 quit_button = tk.Button(button_frame, text="Quit", command=quit_program)
 quit_button.pack(side=tk.LEFT, padx=5)
 
 button_frame.pack(side=tk.TOP, fill=tk.X)
 
-threshold_label = tk.Label(root, text="Detection Area (Y-coordinate %):")
-threshold_label.pack(pady=5)
-
-threshold_slider = tk.Scale(root, from_=0, to=100, orient=tk.HORIZONTAL, command=update_threshold)
-threshold_slider.set(threshold_y * 100)
-threshold_slider.pack(pady=5)
-
 video_label = tk.Label(root)
 video_label.pack(pady=10)
 
-toggle_feed_var = tk.BooleanVar()
-toggle_feed_switch = tk.Checkbutton(root, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
-toggle_feed_switch.pack(padx=5)
-
-version_label = tk.Label(root, text=f"Version: {get_git_version()}")
-version_label.pack(side=tk.BOTTOM, pady=10)
-
-# start_detection()
+start_detection()
 
 root.mainloop()
