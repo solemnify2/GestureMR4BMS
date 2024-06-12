@@ -69,7 +69,7 @@ def detect_hand():
 
         landmarks = 0       # the number of hands detected
 
-        # Draw hand landmarks on the frame with increased visibility
+        # Draw hand landmarks on the frame with increased visibility 
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
                 # Check if the whole hand is in the specified area of the screen
