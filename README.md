@@ -16,7 +16,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    [Command Line Version (will be deprecated soon)](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.3/GestureMR4BMS-v0.0.3.exe).  
    There is no installer yet.
 2. **Run downloaded executable before BMS launch**
-3. **Adjust camera posiiton and detection area**
+3. **Adjust camera posiiton and detection area**: Once you are satisfied, **uncheck "View web cam feed"** to minimize unnecessary overhead caused by this program.
    - Start: Start hand detection  
    - Stop: Stop hand detection  
    - Quit: Quit this program
