@@ -21,7 +21,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    - Quit: Quit this program  
    - Detection Area(Y-coordinate %): Detection area slider. Green rectangle is current area.  
    - View Webcam Feed: Toggle for viewing webcam feed, ROI and detected hand!!! 
-   ![running](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/!)
+   ([running image](https://private-user-images.githubusercontent.com/50224420/338950273-f8c0cd7e-e1be-4193-ab2f-3a4412ac820e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTgxOTI2NDYsIm5iZiI6MTcxODE5MjM0NiwicGF0aCI6Ii81MDIyNDQyMC8zMzg5NTAyNzMtZjhjMGNkN2UtZTFiZS00MTkzLWFiMmYtM2E0NDEyYWM4MjBlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjEyVDExMzkwNlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWY0MGMwMDg2MzUwY2M3MDhkOTkyMDg2NWRlODlhZGJhNzM4MGIzYmE4ZWY3MzBlZjBjZjk4MzUxOTAyNzcxY2ImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.Ok_b3rSeiEsnPzYWqhru4G-YI8PbVAmtZ4o-Z0-wLa0))
 5. **Run Falcon BMS as usual**
 6. **Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
 That's all.
