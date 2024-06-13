@@ -28,13 +28,6 @@ threshold_y = 0.5
 MR_WATERMARK = 5   # MR Cover On Watermark
 mr_cover = 0
 
-def get_git_version():
-    try:
-        version = subprocess.check_output(["git", "describe", "--tags"]).strip().decode('utf-8')
-    except Exception:
-        version = "unknown"
-    return version
-
 # Function to toggle MR cover (replace with actual implementation)
 def mr_cover_on():
     keyboard.press(Key.shift)
@@ -51,9 +44,7 @@ def mr_cover_off():
 def detect_hand():
     global running, show_feed, threshold_y, mr_cover
     global toogle_feed_var
-    
-    print("detect thread start")
-    
+        
     # Initialize the webcam
     cap = cv2.VideoCapture(0)
 
@@ -86,13 +77,7 @@ def detect_hand():
                     mr_cover = MR_WATERMARK             # high watermark immediately, when any hands detected
 
                     if show_feed:
-                        mp_drawing.draw_landmarks(
-                            frame,
-                            hand_landmarks,
-                            mp_hands.HAND_CONNECTIONS,
-                            mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=4),
-                            mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2)
-                        )
+                        mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 
         # If no hands detected or outside detection region
         if landmarks == 0: 
@@ -118,8 +103,6 @@ def detect_hand():
     cap.release()
     cv2.destroyAllWindows()
 
-    print("detect thread stop")
-
 def start_detection():
     global running
     if not running:
@@ -129,6 +112,9 @@ def start_detection():
         
         start_button.config(state=tk.DISABLED)
         stop_button.config(state=tk.NORMAL)
+        
+        video_label.config(text="Detecting", image='')
+
     else:
         messagebox.showinfo("Info", "Detection is already running")
 
@@ -137,6 +123,8 @@ def stop_detection():
     running = False
     start_button.config(state=tk.NORMAL)
     stop_button.config(state=tk.DISABLED)
+    
+    video_label.config(text="", image='')
 
 def create_image():
     # Generate an image to use as the icon
@@ -149,7 +137,6 @@ def create_image():
 
 def on_tray_quit(icon, item):
     stop_detection()
-#    cv2.destroyAllWindows()
 
     icon.stop()
     root.deiconify()
@@ -159,7 +146,7 @@ def show_window(icon, item):
     icon.stop()
     root.after(0, root.deiconify)
 
-def hide_window():
+def hide_window(event=None):
     root.withdraw()
     image = create_image()
     menu = (
@@ -190,11 +177,11 @@ def show_about():
 root = tk.Tk()
 root.title(f"GestureMR4BMS")
 
-root.protocol('WM_DELETE_WINDOW', hide_window)
+root.protocol('WM_DELETE_WINDOW', quit_program)
 
-# 스타일 설정
+# Style
 style = ttk.Style()
-style.configure("TButton", font=("Helvetica", 8), padding=2)
+style.configure("TButton", font=("Arial", 8), padding=2)
 style.map("TButton", foreground=[('pressed', 'white'), ('active', 'blue')],
                   background=[('pressed', 'blue'), ('active', 'lightblue')])
 
@@ -203,12 +190,10 @@ button_frame = tk.Frame(root)
 button_frame.pack(pady=5)
 
 # Create buttons for the main window
-#start_button = tk.Button(button_frame, text="Start", command=start_detection)
-start_button = ttk.Button(button_frame, text="Start", command=start_detection, style="TButton")
+start_button = ttk.Button(button_frame, text="\u25B6 Start", command=start_detection, style="TButton")
 start_button.pack(side=tk.LEFT, padx=5)
 
-#stop_button = tk.Button(button_frame, text="Stop", command=stop_detection)
-stop_button = ttk.Button(button_frame, text="Stop", command=stop_detection, style="TButton")
+stop_button = ttk.Button(button_frame, text="\u25A0 Stop", command=stop_detection, style="TButton")
 stop_button.pack(side=tk.LEFT, padx=5)
 stop_button.config(state=tk.DISABLED)
 
@@ -223,13 +208,9 @@ toggle_feed_var = tk.BooleanVar()
 toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
 toggle_feed_switch.pack(side=tk.LEFT, padx=5)
 
-#about_button = tk.Button(button_frame, text="About", command=show_about)
+about_button = tk.Button(button_frame, text="About", command=show_about)
 about_button = ttk.Button(button_frame, text="About", command=show_about, style="TButton")
 about_button.pack(side=tk.LEFT, padx=5)
-
-#quit_button = tk.Button(button_frame, text="Quit", command=quit_program)
-quit_button = ttk.Button(button_frame, text="Quit", command=quit_program, style="TButton")
-quit_button.pack(side=tk.LEFT, padx=5)
 
 button_frame.pack(side=tk.TOP, fill=tk.X)
 
