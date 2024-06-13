@@ -3,6 +3,7 @@ import mediapipe as mp
 from pynput.keyboard import Controller, Key
 import threading
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk, ImageDraw
 import pystray
@@ -145,7 +146,11 @@ def create_image():
 
 def on_tray_quit(icon, item):
     stop_detection()
+    cap.release()
+    cv2.destroyAllWindows()
+
     icon.stop()
+    root.deiconify()
     root.quit()  # Properly exit the Tkinter main loop
 
 def show_window(icon, item):
@@ -169,6 +174,7 @@ def update_threshold(value):
 def update_feed():
     global show_feed
     show_feed = toggle_feed_var.get()
+    video_label.config(text="", image='')
     
 def quit_program():
     stop_detection()
@@ -186,19 +192,27 @@ root.title(f"GestureMR4BMS")
 
 root.protocol('WM_DELETE_WINDOW', hide_window)
 
+# 스타일 설정
+style = ttk.Style()
+style.configure("TButton", font=("Helvetica", 8), padding=2)
+style.map("TButton", foreground=[('pressed', 'white'), ('active', 'blue')],
+                  background=[('pressed', 'blue'), ('active', 'lightblue')])
+
 # Create a frame to contain the buttons and toggle switch
 button_frame = tk.Frame(root)
 button_frame.pack(pady=5)
 
 # Create buttons for the main window
-start_button = tk.Button(button_frame, text="Start", command=start_detection)
+#start_button = tk.Button(button_frame, text="Start", command=start_detection)
+start_button = ttk.Button(button_frame, text="Start", command=start_detection, style="TButton")
 start_button.pack(side=tk.LEFT, padx=5)
 
-stop_button = tk.Button(button_frame, text="Stop", command=stop_detection)
+#stop_button = tk.Button(button_frame, text="Stop", command=stop_detection)
+stop_button = ttk.Button(button_frame, text="Stop", command=stop_detection, style="TButton")
 stop_button.pack(side=tk.LEFT, padx=5)
 stop_button.config(state=tk.DISABLED)
 
-threshold_label = tk.Label(button_frame, text="Detection Area (Y-coordinate %):")
+threshold_label = tk.Label(button_frame, text="Detection Area:")
 threshold_label.pack(side=tk.LEFT, padx=5)
 
 threshold_slider = tk.Scale(button_frame, from_=0, to=100, orient=tk.HORIZONTAL, command=update_threshold, showvalue=False)
@@ -209,10 +223,12 @@ toggle_feed_var = tk.BooleanVar()
 toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
 toggle_feed_switch.pack(side=tk.LEFT, padx=5)
 
-about_button = tk.Button(button_frame, text="About", command=show_about)
+#about_button = tk.Button(button_frame, text="About", command=show_about)
+about_button = ttk.Button(button_frame, text="About", command=show_about, style="TButton")
 about_button.pack(side=tk.LEFT, padx=5)
 
-quit_button = tk.Button(button_frame, text="Quit", command=quit_program)
+#quit_button = tk.Button(button_frame, text="Quit", command=quit_program)
+quit_button = ttk.Button(button_frame, text="Quit", command=quit_program, style="TButton")
 quit_button.pack(side=tk.LEFT, padx=5)
 
 button_frame.pack(side=tk.TOP, fill=tk.X)
