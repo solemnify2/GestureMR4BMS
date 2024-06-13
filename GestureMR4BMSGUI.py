@@ -18,9 +18,6 @@ mp_drawing = mp.solutions.drawing_utils
 # Initialize keyboard controller
 keyboard = Controller()
 
-# Initialize the webcam
-cap = cv2.VideoCapture(0)
-
 # Flags to control the loop
 running = False
 show_feed = False
@@ -56,6 +53,9 @@ def detect_hand():
     global toogle_feed_var
     
     print("detect thread start")
+    
+    # Initialize the webcam
+    cap = cv2.VideoCapture(0)
 
     while running and cap.isOpened():
         ret, frame = cap.read()
@@ -115,6 +115,9 @@ def detect_hand():
             
         time.sleep(0.2)  # Slow down
 
+    cap.release()
+    cv2.destroyAllWindows()
+
     print("detect thread stop")
 
 def start_detection():
@@ -146,8 +149,7 @@ def create_image():
 
 def on_tray_quit(icon, item):
     stop_detection()
-    cap.release()
-    cv2.destroyAllWindows()
+#    cv2.destroyAllWindows()
 
     icon.stop()
     root.deiconify()
@@ -178,8 +180,6 @@ def update_feed():
     
 def quit_program():
     stop_detection()
-    cap.release()
-    cv2.destroyAllWindows()
 
     root.quit()
 
