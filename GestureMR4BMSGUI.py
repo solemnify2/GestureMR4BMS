@@ -81,8 +81,6 @@ def detect_hand():
                     if mr_cover == 0:                   # Immediate MR_Cover on as soon as any hands detected
                         mr_cover_on()
                         video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}", image='')
-
-                        print()
                         
                     mr_cover = MR_WATERMARK             # high watermark immediately, when any hands detected
 
@@ -124,12 +122,17 @@ def start_detection():
         running = True
         thread = threading.Thread(target=detect_hand)
         thread.start()
+        
+        start_button.config(state=tk.DISABLED)
+        stop_button.config(state=tk.NORMAL)
     else:
         messagebox.showinfo("Info", "Detection is already running")
 
 def stop_detection():
     global running
     running = False
+    start_button.config(state=tk.NORMAL)
+    stop_button.config(state=tk.DISABLED)
 
 def create_image():
     # Generate an image to use as the icon
@@ -193,6 +196,7 @@ start_button.pack(side=tk.LEFT, padx=5)
 
 stop_button = tk.Button(button_frame, text="Stop", command=stop_detection)
 stop_button.pack(side=tk.LEFT, padx=5)
+stop_button.config(state=tk.DISABLED)
 
 threshold_label = tk.Label(button_frame, text="Detection Area (Y-coordinate %):")
 threshold_label.pack(side=tk.LEFT, padx=5)
