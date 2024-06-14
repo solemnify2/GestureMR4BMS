@@ -171,7 +171,7 @@ def quit_program():
     root.quit()
 
 def show_about():
-    messagebox.showinfo("About", "GestureMR4BMS Version 0.0.5\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+    messagebox.showinfo("About", "GestureMR4BMS Version 0.0.8\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
 
 # Tkinter GUI setup
 root = tk.Tk()
