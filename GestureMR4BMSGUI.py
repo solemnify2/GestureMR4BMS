@@ -22,7 +22,8 @@ keyboard = Controller()
 running = False
 show_feed = False
 
-# Variable for y-coordinate threshold
+# Variable for threshold
+threshold_x = 0
 threshold_y = 0.5
 
 MR_WATERMARK = 5   # MR Cover On Watermark
@@ -66,7 +67,7 @@ def detect_hand():
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
                 # Check if the whole hand is in the specified area of the screen
-                hand_in_specified_area = all(landmark.y > threshold_y for landmark in hand_landmarks.landmark)
+                hand_in_specified_area = all(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark)
                 if hand_in_specified_area:
                     landmarks = landmarks + 1
                     wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
