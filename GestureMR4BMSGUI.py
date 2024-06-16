@@ -106,26 +106,21 @@ def detect_hand():
 
 def start_detection():
     global running
-    if not running:
-        running = True
-        thread = threading.Thread(target=detect_hand)
-        thread.start()
-        
-        start_button.config(state=tk.DISABLED)
-        stop_button.config(state=tk.NORMAL)
-        
-        video_label.config(text="Detecting", image='')
-
-    else:
-        messagebox.showinfo("Info", "Detection is already running")
+    
+    running = True
+    thread = threading.Thread(target=detect_hand)
+    thread.start()
+    
+    start_stop_button.config(text="\u25A0", command=stop_detection)
+    
+    video_label.config(text="Detecting", image='')
 
 def stop_detection():
     global running
     running = False
-    start_button.config(state=tk.NORMAL)
-    stop_button.config(state=tk.DISABLED)
+    start_stop_button.config(text="\u25B6", command=start_detection)
     
-    video_label.config(text="", image='')
+    video_label.config(text="Stopped. Click \u25B6 to start detecting.", image='')
 
 def create_image():
     # Generate an image to use as the icon
@@ -182,7 +177,7 @@ root.protocol('WM_DELETE_WINDOW', quit_program)
 
 # Style
 style = ttk.Style()
-style.configure("TButton", font=("Arial", 8), padding=2)
+style.configure("TButton", padding=2)
 style.map("TButton", foreground=[('pressed', 'white'), ('active', 'blue')],
                   background=[('pressed', 'blue'), ('active', 'lightblue')])
 
@@ -191,12 +186,8 @@ button_frame = tk.Frame(root)
 button_frame.pack(pady=5)
 
 # Create buttons for the main window
-start_button = ttk.Button(button_frame, text="\u25B6 Start", command=start_detection, style="TButton")
-start_button.pack(side=tk.LEFT, padx=5)
-
-stop_button = ttk.Button(button_frame, text="\u25A0 Stop", command=stop_detection, style="TButton")
-stop_button.pack(side=tk.LEFT, padx=5)
-stop_button.config(state=tk.DISABLED)
+start_stop_button = ttk.Button(button_frame, text="\u25B6", width=2, command=start_detection, style="TButton")
+start_stop_button.pack(side=tk.LEFT, padx=5)
 
 threshold_label = tk.Label(button_frame, text="Detection Area:")
 threshold_label.pack(side=tk.LEFT, padx=5)
@@ -209,8 +200,7 @@ toggle_feed_var = tk.BooleanVar()
 toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
 toggle_feed_switch.pack(side=tk.LEFT, padx=5)
 
-about_button = tk.Button(button_frame, text="About", command=show_about)
-about_button = ttk.Button(button_frame, text="About", command=show_about, style="TButton")
+about_button = ttk.Button(button_frame, text="About", width=6, command=show_about, style="TButton")
 about_button.pack(side=tk.LEFT, padx=5)
 
 button_frame.pack(side=tk.TOP, fill=tk.X)
