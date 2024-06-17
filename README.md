@@ -23,7 +23,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    ```
    pip install cv2 mediapipe pynput tkinter pystray
    ```
-3. **Download and Run GestureMR4BMSGUI.py script before BMS launch:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** "View Webcam Feed" to minimize unnecessary overhead caused by this program.
+3. **Download and Run GestureMR4BMSGUI.py script before BMS launch:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
    - Start: Start hand detection  
    - Stop: Stop hand detection  
    - Quit: Quit this program
