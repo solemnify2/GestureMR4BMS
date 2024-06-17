@@ -31,8 +31,10 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    - Detection Area: Slider to adjust detection area. Green rectangle in camera feed is current area.
    - View Webcam Feed: Toggle for viewing webcam feed, ROI and detected hand!!! 
    - '_': Minimize to tray
-   - Show: Restore main window
-   - Quit or 'x': Quit this program   
+   - 'x': Quit this program   
+   - Show: Restore main window (tray only)
+   - About: About window (tray only)
+   - Quit: Quit this program (tray only)
 
 4. **Run Falcon BMS as usual**
 
