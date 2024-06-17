@@ -27,7 +27,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 
     ![image](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/b8f7ab8c-0f90-498b-b696-00b3285fe93c)
 
-   - Start&#25A0/Stop: Start or stop hand detection  
+   - Start &#9658 /Stop: Start or stop hand detection  
    - Detection Area: Slider to adjust detection area. Green rectangle in camera feed is current area.
    - View Webcam Feed: Toggle for viewing webcam feed, ROI and detected hand!!! 
    - '_': Minimize to tray
