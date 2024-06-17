@@ -8,22 +8,33 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - **MR Control**: Toggles the MR Cover in Falcon BMS based on recognized hand gestures.
 
 ## Requirements
-- none
+- Python
+- Python libraries: cv2 mediapipe pynput tkinter pystray
   
 ## Usage
-1. **Download Pre-built GestureMR4BMS.exe**  
-   [Newest Version](https://github.com/solemnify2/GestureMR4BMS/releases/download/v0.0.8/GestureMR4BMSGUI-v0.0.8.exe)
-   There is no installer yet.
-2. **Run downloaded executable before BMS launch:** You may encounter windows defender warning. Select run anyway.
-3. **Adjust camera posiiton and detection area**
+
+1. **Install python**
+   Visit python.org or microsoft store
+   
+2. **Install python libraries**
+   ```
+   pip install cv2 mediapipe pynput tkinter pystray
+   ```
+3. **Download and Run GestureMR4BMSGui.py script before BMS launch:**
+   INFO: Recently, the executable file created with PyInstaller has been detected as a virus. The cause of this issue is unclear, and distributing the executable file in .exe format is deemed unsafe for any reason. Therefore, we have decided to stop distributing executable files and will only distribute the program as a Python script. We apologize for the inconvenience, but we recommend that you install Python and the necessary dependencies to use our program. We are sorry for any inconvenience this may cause.
+
+4. **Adjust camera posiiton and detection area**
    - Start: Start hand detection  
    - Stop: Stop hand detection  
    - Quit: Quit this program
    - Detection Area(Y-coordinate %): Slider to adjust detection area. Green rectangle in camera feed is current area.
    - View Webcam Feed: Toggle for viewing webcam feed, ROI and detected hand!!! Once you are satisfied, **uncheck** to minimize unnecessary overhead caused by this program.
-   - 'x': Minimize to tray
-4. **Run Falcon BMS as usual**
-5. **Hand Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
+   - '_': Minimize to tray
+   - 'x': Quit program
+
+5. **Run Falcon BMS as usual**
+
+6. **Hand Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** The program recognizes an open hand gesture to toggle the MR Cover. When an open hand is detected, it simulates a keyboard input to toggle the MR Cover in Falcon BMS. 
 That's all.
 
 ## Tips
