@@ -21,7 +21,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    pip install cv2 mediapipe pynput tkinter pystray
    ```
 3. **Download and Run GestureMR4BMSGUI.py script before BMS launch:**
-   INFO: Recently, the executable file created with PyInstaller has been detected as a virus. The cause of this issue is unclear, and distributing the executable file in .exe format is deemed unsafe for any reason. Therefore, we have decided to stop distributing executable files and will only distribute the program as a Python script. We apologize for the inconvenience, but we recommend that you install Python and the necessary dependencies to use our program. We are sorry for any inconvenience this may cause.
+   INFO: Recently, the executable file created with PyInstaller has been detected as a virus. The cause of this issue is unclear, and distributing the executable file in .exe format is deemed unsafe for any reason. Therefore, We have decided to stop distributing executable files and will only distribute the program as a Python script. We apologize for the inconvenience, but we recommend that you install Python and the necessary dependencies to use our program. We are sorry for any inconvenience this may cause.
 
 4. **Adjust camera posiiton and detection area**
    - Start: Start hand detection  
