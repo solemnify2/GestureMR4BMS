@@ -7,7 +7,6 @@ from tkinter import ttk
 from tkinter import messagebox
 from PIL import Image, ImageTk, ImageDraw
 import pystray
-# import subprocess
 import time
 
 # Initialize MediaPipe Hands
