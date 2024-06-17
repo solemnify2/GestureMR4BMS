@@ -51,7 +51,7 @@ That's all.
 ```
 pyinstaller --onefile --noconsole GestureMR4MBSGUI.py
 ```
-- Modify pyinstaller spec file
+- Modify pyinstaller spec file. Please modify the mediapipe-related path in the spec file as shown below. In the example, 'solemn' is my account name on my PC. The exact path will differ for each PC, so please find the mediapipe module path in your file explorer and change it accordingly.
 ```
     datas=[
       ('C:\\Users\\solem\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mediapipe\\modules', 'mediapipe\\modules'),
