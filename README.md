@@ -25,7 +25,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    ```
 3. **Download and Run GestureMR4BMSGUI.py script before BMS launch:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
 
-    ![image](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/b8f7ab8c-0f90-498b-b696-00b3285fe93c)
+   ![Running](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/b5ea3ba8-19db-4203-add0-e95e1ec920ce)
 
    - Start &#9654; / Stop &#9632; : Start or stop hand detection  
    - Detection Area: Slider to adjust detection area. Green rectangle in camera feed is current area.
