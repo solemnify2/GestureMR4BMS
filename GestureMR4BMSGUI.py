@@ -21,6 +21,7 @@ keyboard = Controller()
 # Flags to control the loop
 running = False
 show_feed = False
+tray_start_stop = ""
 
 # Variable for threshold
 threshold_x = 0
@@ -106,21 +107,24 @@ def detect_hand():
 
 def start_detection():
     global running
-    
-    running = True
-    thread = threading.Thread(target=detect_hand)
-    thread.start()
-    
-    start_stop_button.config(text="\u25A0", command=stop_detection)
-    
-    video_label.config(text="Detecting", image='')
+
+    if running == False:
+        running = True
+        thread = threading.Thread(target=detect_hand)
+        thread.start()
+        
+        start_stop_button.config(text="\u25A0", command=stop_detection)
+        
+        video_label.config(text="Detecting", image='')
 
 def stop_detection():
     global running
-    running = False
-    start_stop_button.config(text="\u25B6", command=start_detection)
     
-    video_label.config(text="Stopped. Click \u25B6 to start detecting.", image='')
+    if running == True:
+        running = False
+        start_stop_button.config(text="\u25B6", command=start_detection)
+        
+        video_label.config(text="Stopped. Click \u25B6 to start detecting.", image='')
 
 def create_image():
     # Generate an image to use as the icon
@@ -131,25 +135,52 @@ def create_image():
     dc.rectangle((width // 4, height // 4, 3 * width // 4, 3 * height // 4), fill="black")
     return image
 
+def on_tray_start_stop(icon, item):
+    global running, tray_start_stop
+    
+    if running == False:
+        start_detection()
+        tray_start_stop = "Stop"
+    else:
+        stop_detection()
+        tray_start_stop = "Start"
+
 def on_tray_quit(icon, item):
     stop_detection()
 
     icon.stop()
+
     root.deiconify()
     root.quit()  # Properly exit the Tkinter main loop
 
 def show_window(icon, item):
     icon.stop()
-    root.after(0, root.deiconify)
+    
+#    root.after(0, root.deiconify)
+    root.deiconify()
 
 def hide_window(event=None):
+    global tray_start_stop, running
+    
+    if root.state() == 'withdrawn':
+        return
+        
     root.withdraw()
+    
     image = create_image()
-    menu = (
+    
+    if running == False:
+        tray_start_stop = "Start"
+    else:
+        tray_start_stop = "Stop"
+
+    tray_menu = pystray.Menu(
+        pystray.MenuItem(lambda text: tray_start_stop, on_tray_start_stop),
         pystray.MenuItem('Show', show_window),
-        pystray.MenuItem('Quit', on_tray_quit)
-    )
-    icon = pystray.Icon("GestureMR4BMS", image, "GestureMR4BMS", menu)
+        pystray.MenuItem('About', show_about),
+        pystray.MenuItem('Quit', on_tray_quit))
+        
+    icon = pystray.Icon("GestureMR4BMS", image, "GestureMR4BMS", tray_menu)
     threading.Thread(target=icon.run).start()
 
 def update_threshold(value):
@@ -174,6 +205,9 @@ root = tk.Tk()
 root.title(f"GestureMR4BMS")
 
 root.protocol('WM_DELETE_WINDOW', quit_program)
+#root.protocol('WM_DELETE_WINDOW', hide_window)
+
+root.bind("<Unmap>", hide_window)
 
 # Style
 style = ttk.Style()
@@ -200,13 +234,14 @@ toggle_feed_var = tk.BooleanVar()
 toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
 toggle_feed_switch.pack(side=tk.LEFT, padx=5)
 
-about_button = ttk.Button(button_frame, text="About", width=6, command=show_about, style="TButton")
-about_button.pack(side=tk.LEFT, padx=5)
+#about_button = ttk.Button(button_frame, text="About", width=6, command=show_about, style="TButton")
+#about_button.pack(side=tk.LEFT, padx=5)
 
 button_frame.pack(side=tk.TOP, fill=tk.X)
 
 video_label = tk.Label(root)
 video_label.pack(pady=10)
+
 
 start_detection()
 
