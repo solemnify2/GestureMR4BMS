@@ -42,7 +42,23 @@ That's all.
 1. **Camera Position** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located. When seated and reaching your hand towards the MFD, the camera should be positioned so that your hand appears in the lower half of the video feed. Using a camera recording program to check where your hand appears in the video is a good way to ensure proper installation. The upper half of the video feed is likely occupied by your HOTAS, and hand detection is disabled in this area to avoid false positives.
     ![image](https://private-user-images.githubusercontent.com/50224420/338950273-f8c0cd7e-e1be-4193-ab2f-3a4412ac820e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTgxOTI4MjEsIm5iZiI6MTcxODE5MjUyMSwicGF0aCI6Ii81MDIyNDQyMC8zMzg5NTAyNzMtZjhjMGNkN2UtZTFiZS00MTkzLWFiMmYtM2E0NDEyYWM4MjBlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjEyVDExNDIwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWIyYTEwODZiZjQ0ZDYwY2M5NWNjODNkMjNjYjM4ZGQ5OTc3MDI3NWZlN2FlOGNkNmM3OGRjZDgzNWNiMjY2YTgmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.uKYfvzJ3ZuWaBs0pGyeN5KV3QyrJZkfvP3kaP2bvEHI)
    
-3. **Reverse Operation** The current method to toggle the MR cover is using the keyboard input Shift+1. This operates on a toggle basis, which means the MR cover might turn on or off in reverse if there are detection errors. If you encounter this issue, you can manually resolve it by pressing Shift+1 on your keyboard. This manual input should correct the toggle state. It would greatly help resolve this issue if the Falcon BMS team could change the MR cover toggle key to a dedicated on/off key. This would eliminate the ambiguity caused by the toggle mechanism and ensure more reliable operation.
+2. **Reverse Operation** The current method to toggle the MR cover is using the keyboard input Shift+1. This operates on a toggle basis, which means the MR cover might turn on or off in reverse if there are detection errors. If you encounter this issue, you can manually resolve it by pressing Shift+1 on your keyboard. This manual input should correct the toggle state. It would greatly help resolve this issue if the Falcon BMS team could change the MR cover toggle key to a dedicated on/off key. This would eliminate the ambiguity caused by the toggle mechanism and ensure more reliable operation.
+3. **Making executable** You can convert Python scripts into executable files using PyInstaller. However, there is currently an issue where executable files built with PyInstaller are being detected as viruses by Windows Defender. I am still unsure how to resolve this issue, so I will not be distributing these generated executable files. However, if you prefer, I recommend using PyInstaller to create an executable file yourself. Please follow the instructions below to create the executable file
+
+- Build pyinstaller spec file first.
+```
+pyinstaller --onefile --noconsole GestureMR4MBSGUI.py
+```
+- Modify pyinstaller spec file
+```
+    datas=[
+      ('C:\\Users\\solem\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\mediapipe\\modules', 'mediapipe\\modules'),
+    ],
+```
+- Rebuild executable from pyinstaller spec file
+```
+pyinstaller GestureMR4BMSGUI.spec
+```
 
 ## How It Works
 - **Hand Tracking**: The program uses MediaPipe to track hand landmarks in real-time through the webcam.
