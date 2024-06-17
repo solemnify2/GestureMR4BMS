@@ -11,7 +11,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    I have previously distributed Python scripts as executable files built using PyInstaller for those who are not familiar with Python. However, there is currently an issue where executable files built with PyInstaller are being detected as viruses by Windows Defender. I am still unsure how to resolve this issue, so I will not be distributing these generated executable files. I am sorry for any inconvenience this may cause.
 
 ## Requirements
-- Python
+- Latest Python
 - Python libraries: cv2 mediapipe pynput tkinter pystray
   
 ## Usage
