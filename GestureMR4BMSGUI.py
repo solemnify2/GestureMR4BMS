@@ -140,10 +140,12 @@ def on_tray_start_stop(icon, item):
     
     if running == False:
         start_detection()
-        tray_start_stop = "Stop"
+        
+        tray_start_stop = "\u25A0 Stop"
     else:
         stop_detection()
-        tray_start_stop = "Start"
+        
+        tray_start_stop = "\u25B6 Start"
 
 def on_tray_quit(icon, item):
     stop_detection()
@@ -170,9 +172,9 @@ def hide_window(event=None):
     image = create_image()
     
     if running == False:
-        tray_start_stop = "Start"
+        tray_start_stop = "\u25B6 Start"
     else:
-        tray_start_stop = "Stop"
+        tray_start_stop = "\u25A0 Stop"
 
     tray_menu = pystray.Menu(
         pystray.MenuItem(lambda text: tray_start_stop, on_tray_start_stop),
@@ -198,14 +200,13 @@ def quit_program():
     root.quit()
 
 def show_about():
-    messagebox.showinfo("About", "GestureMR4BMS Version 0.0.8\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+    messagebox.showinfo("About", "GestureMR4BMS Version 0.1.0\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
 
 # Tkinter GUI setup
 root = tk.Tk()
 root.title(f"GestureMR4BMS")
 
 root.protocol('WM_DELETE_WINDOW', quit_program)
-#root.protocol('WM_DELETE_WINDOW', hide_window)
 
 root.bind("<Unmap>", hide_window)
 
@@ -241,7 +242,6 @@ button_frame.pack(side=tk.TOP, fill=tk.X)
 
 video_label = tk.Label(root)
 video_label.pack(pady=10)
-
 
 start_detection()
 
