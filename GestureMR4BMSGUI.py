@@ -66,11 +66,15 @@ def detect_hand():
         # Draw hand landmarks on the frame with increased visibility 
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
-                # Check if the whole hand is in the specified area of the screen
-                hand_in_specified_area = all(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark)
-                if hand_in_specified_area:
+                # detectio option) Select one of the followings that you prefer
+                # Opt1) Check if the whole hand is in the specified area of the screen
+                # if all(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark):
+                # Opt2) Check if any part of the hand is in the specified area of the screen
+                # if any(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark):
+                # Opt3) Check if the wrist is in the specified area of the screen
+                wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
+                if wrist.x > threshold_x and wrist.x < 1 - threshold_x and wrist.y > threshold_y:
                     landmarks = landmarks + 1
-                    wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
                     if mr_cover == 0:                   # Immediate MR_Cover on as soon as any hands detected
                         mr_cover_on()
                         video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}", image='')
