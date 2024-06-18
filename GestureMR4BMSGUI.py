@@ -25,6 +25,7 @@ tray_start_stop = ""
 # Variable for threshold
 threshold_x = 0
 threshold_y = 0.5
+detection_mode = 0
 
 MR_WATERMARK = 5   # MR Cover On Watermark
 mr_cover = 0
@@ -44,7 +45,7 @@ def mr_cover_off():
 
 def detect_hand():
     global running, show_feed, threshold_y, mr_cover
-    global toogle_feed_var
+    global toogle_feed_var, detection_mode
         
     # Initialize the webcam
     cap = cv2.VideoCapture(0)
@@ -66,14 +67,12 @@ def detect_hand():
         # Draw hand landmarks on the frame with increased visibility 
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
+                wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
                 # detectio option) Select one of the followings that you prefer
                 # Opt1) Check if the whole hand is in the specified area of the screen
-                # if all(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark):
-                # Opt2) Check if any part of the hand is in the specified area of the screen
-                # if any(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark):
-                # Opt3) Check if the wrist is in the specified area of the screen
-                wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
-                if wrist.x > threshold_x and wrist.x < 1 - threshold_x and wrist.y > threshold_y:
+                if (detection_mode == 0 and wrist.x > threshold_x and wrist.x < 1 - threshold_x and wrist.y > threshold_y) or \
+                   (detection_mode == 1 and any(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark)) or \
+                   (detection_mode == 2 and all(landmark.x > threshold_x and landmark.x < 1 - threshold_x and landmark.y > threshold_y for landmark in hand_landmarks.landmark)):
                     landmarks = landmarks + 1
                     if mr_cover == 0:                   # Immediate MR_Cover on as soon as any hands detected
                         mr_cover_on()
@@ -197,6 +196,13 @@ def update_feed():
     show_feed = toggle_feed_var.get()
     video_label.config(text="", image='')
     
+# Function to handle the selection of an option
+def on_option_select(event):
+    global detection_mode
+    
+    detection_mode = combobox['values'].index(combobox.get())
+    # print(f"Selected option: {detection_mode}")    
+    
 def quit_program():
     stop_detection()
 
@@ -233,6 +239,19 @@ threshold_label.pack(side=tk.LEFT, padx=5)
 threshold_slider = tk.Scale(button_frame, from_=0, to=100, orient=tk.HORIZONTAL, command=update_threshold, showvalue=False)
 threshold_slider.set(threshold_y * 100)
 threshold_slider.pack(side=tk.LEFT, padx=5)
+
+# Create a StringVar to hold the value of the selected option
+option_var = tk.StringVar()
+
+mode_label = tk.Label(button_frame, text="Modes:")
+mode_label.pack(side=tk.LEFT, padx=5)
+
+# Create a Combobox with detection modes
+options = ["Wrist only", "Any parts of hand", "All parts of hand"]
+combobox = ttk.Combobox(button_frame, textvariable=option_var, values=options, state='readonly')
+combobox.current(0)  # Set the default value to the first option
+combobox.bind("<<ComboboxSelected>>", on_option_select)
+combobox.pack(side=tk.LEFT, padx=5)
 
 toggle_feed_var = tk.BooleanVar()
 toggle_feed_switch = tk.Checkbutton(button_frame, text="View Webcam Feed", variable=toggle_feed_var, command=update_feed)
