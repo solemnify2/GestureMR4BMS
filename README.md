@@ -39,7 +39,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
        
 2. **Reverse Operation:** The current method to toggle the MR cover is using the keyboard input Shift+1. This operates on a toggle basis, which means the MR cover might turn on or off in reverse if there are detection errors. If you encounter this issue, you can manually resolve it by pressing Shift+1 on your keyboard. It would greatly help resolve this issue if the Falcon BMS team could change the MR cover toggle key to a dedicated on/off key. This would eliminate the ambiguity caused by the toggle mechanism and ensure more reliable operation.
 
-3. **Running python script:**
+3. **Running python script:** If you are concerned about Windows Defender warnings, you can run the Python script instead of using the prebuilt executable.
    - **Install python:**
    Visit python.org or microsoft store
    
