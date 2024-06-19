@@ -29,7 +29,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    - About: About window (tray only)
    - Quit: Quit this program (tray only)
 
-3. **Run Falcon BMS as usual**
+3. **Run Falcon BMS as usual** 
 
 4. **Hand Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** That's all.
 
@@ -47,7 +47,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    ```
    pip install cv2 mediapipe pynput tkinter pystray
    ```
-   - **Download and Run GestureMR4BMSGUI.py script:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
+   - **Download and Run GestureMR4BMSGUI.py script:**  
      
 4. **Making executable:** You can convert Python scripts into executable files using PyInstaller. Please follow the instructions below to create the executable file. However, there is currently an issue where the executable file built with PyInstaller is being detected as virus by Windows Defender. 
 
