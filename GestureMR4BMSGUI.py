@@ -87,17 +87,17 @@ class GestureMR4BMSApp:
             
         
     # Function to toggle MR cover (replace with actual implementation)
-    def mr_cover_on():
-        keyboard.press(Key.shift)
-        keyboard.press('1')
-        keyboard.release('1')
-        keyboard.release(Key.shift)
+    def mr_cover_on(self):
+        self.keyboard.press(Key.shift)
+        self.keyboard.press('1')
+        self.keyboard.release('1')
+        self.keyboard.release(Key.shift)
 
-    def mr_cover_off():
-        keyboard.press(Key.shift)
-        keyboard.press('1')
-        keyboard.release('1')
-        keyboard.release(Key.shift)
+    def mr_cover_off(self):
+        self.keyboard.press(Key.shift)
+        self.keyboard.press('1')
+        self.keyboard.release('1')
+        self.keyboard.release(Key.shift)
 
     def detect_hand(self):
         global running, show_feed, threshold_y, mr_cover_watermark
@@ -119,7 +119,7 @@ class GestureMR4BMSApp:
         # Draw hand landmarks on the frame with increased visibility 
         if result.multi_hand_landmarks:
             for hand_landmarks in result.multi_hand_landmarks:
-                wrist = hand_landmarks.landmark[mp_hands.HandLandmark.WRIST]
+                wrist = hand_landmarks.landmark[self.mp_hands.HandLandmark.WRIST]
                 # detectio option) Select one of the followings that you prefer
                 # Opt1) Check if the whole hand is in the specified area of the screen
                 if (self.detection_mode == 0 and wrist.x > self.threshold_x and wrist.x < 1 - self.threshold_x and wrist.y > self.threshold_y) or \
@@ -127,13 +127,13 @@ class GestureMR4BMSApp:
                    (self.detection_mode == 2 and all(landmark.x > self.threshold_x and landmark.x < 1 - self.threshold_x and landmark.y > self.threshold_y for landmark in hand_landmarks.landmark)):
                     landmarks = landmarks + 1
                     if self.mr_cover_watermark == 0:                   # Immediate mr_cover_watermark on as soon as any hands detected
-                        mr_cover_on()
+                        self.mr_cover_on()
                         self.video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}", image='')
                         
-                    self.mr_cover_watermark = MR_WATERMARK             # high watermark immediately, when any hands detected
+                    self.mr_cover_watermark = self.MR_WATERMARK             # high watermark immediately, when any hands detected
 
                     if self.show_feed:
-                        mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                        self.mp_drawing.draw_landmarks(frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
                 
         # If no hands detected or outside detection region
         if landmarks == 0: 
@@ -141,7 +141,7 @@ class GestureMR4BMSApp:
 
             # mr_cover_watermark off after some delay to prevent hand detection noise
             if self.mr_cover_watermark == 1:
-                mr_cover_off()
+                self.mr_cover_off()
                 self.video_label.config(text="No hand detected", image='')
 
         if self.show_feed:
@@ -155,7 +155,7 @@ class GestureMR4BMSApp:
             self.video_label.configure(image=imgtk)
             
         if self.running:
-            self.root.after(20, self.detect_hand)
+            self.root.after(100, self.detect_hand)
 
     def on_start_detection(self):
         if self.running == False:
@@ -246,7 +246,7 @@ class GestureMR4BMSApp:
         self.root.quit()
 
     def on_show_about(self):
-        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.0\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.2\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
 
 if __name__ == "__main__":
     # Tkinter GUI setup
