@@ -12,7 +12,7 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
   
 ## Usage
 
-1. **Download latest GestureMR4BMSGUI.exe:**  There is an issue with Windows Defender detecting my program as a virus. To avoid this, please create a folder named "GestureMR4BMS" under "C:\Falcon BMS 4.37\Tools" and place the executable file there to avoid
+1. **Download latest GestureMR4BMSGUI.exe:**  There is an issue with Windows Defender detecting my program as a virus. To avoid this, please create a folder named "GestureMR4BMS" under "C:\Falcon BMS 4.37\Tools" and place the executable file there to avoid. If Windows Defender gives a virus warning immediately after downloading, please temporarily turn off Windows Defender's virus scanning and then proceed with the download.
 
     [Latest Release](https://github.com/solemnify2/GestureMR4BMS/releases/download/0.2.1/GestureMR4BMSGUI-v0.2.1.exe)
 
