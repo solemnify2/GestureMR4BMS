@@ -38,7 +38,18 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 1. **Camera Position:** The recommended installation position for the camera is at the top of your monitor. Angle the camera significantly downward to face below the monitor where your MFD or ICP is located. When seated and reaching your hand towards the MFD, the camera should be positioned so that your hand appears in the lower half of the video feed. Using a camera recording program to check where your hand appears in the video is a good way to ensure proper installation. The upper half of the video feed is likely occupied by your HOTAS, and hand detection is disabled in this area to avoid false positives.
        
 2. **Reverse Operation:** The current method to toggle the MR cover is using the keyboard input Shift+1. This operates on a toggle basis, which means the MR cover might turn on or off in reverse if there are detection errors. If you encounter this issue, you can manually resolve it by pressing Shift+1 on your keyboard. It would greatly help resolve this issue if the Falcon BMS team could change the MR cover toggle key to a dedicated on/off key. This would eliminate the ambiguity caused by the toggle mechanism and ensure more reliable operation.
-3. **Making executable:** You can convert Python scripts into executable files using PyInstaller. Please follow the instructions below to create the executable file. However, there is currently an issue where the executable file built with PyInstaller is being detected as virus by Windows Defender. 
+
+3. **Running python script:**
+   - **Install python:**
+   Visit python.org or microsoft store
+   
+   - **Install python libraries:** Open command prompt and run following
+   ```
+   pip install cv2 mediapipe pynput tkinter pystray
+   ```
+   - **Download and Run GestureMR4BMSGUI.py script:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
+     
+4. **Making executable:** You can convert Python scripts into executable files using PyInstaller. Please follow the instructions below to create the executable file. However, there is currently an issue where the executable file built with PyInstaller is being detected as virus by Windows Defender. 
 
 - Build pyinstaller spec file first.
 ```
