@@ -7,23 +7,14 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
 - **Real-Time Hand Tracking**: Utilizes MediaPipe to detect and track hand movements in real-time.
 - **MR Control**: Toggles the MR Cover in Falcon BMS based on recognized hand gestures.
 
-## Info
-   I have previously distributed Python scripts as an executable file built using PyInstaller for those who are not familiar with Python. However, there is currently an issue where the executable file built with PyInstaller is being detected as virus by Windows Defender. I am still unsure how to resolve this issue, so I will not be distributing the generated executable file. I am sorry for any inconvenience this may cause.
-
 ## Requirements
-- Latest Python
-- Python libraries: cv2 mediapipe pynput tkinter pystray
+- None
   
 ## Usage
 
-1. **Install python:**
-   Visit python.org or microsoft store
-   
-2. **Install python libraries:** Open command prompt and run following
-   ```
-   pip install cv2 mediapipe pynput tkinter pystray
-   ```
-3. **Download and Run GestureMR4BMSGUI.py script before BMS launch:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
+1. **Download latest GestureMR4BMSGUI.exe:**  There is an issue with Windows Defender detecting my program as a virus. To avoid this, please create a folder named "GestureMR4BMS" under "C:\Falcon BMS 4.37\Tools" and place the executable file there to avoid
+
+2. **Run GestureMR4BMSGUI.exe before BMS launch:** Adjust camera position and detection area. Checking **"View Webcam Feed"** will greatly help this job. Once you are satisfied, **uncheck** it to minimize unnecessary overhead caused by this program.
 
    ![Running](https://github.com/solemnify2/GestureMR4BMS/assets/50224420/b5ea3ba8-19db-4203-add0-e95e1ec920ce)
 
@@ -36,9 +27,9 @@ This project utilizes a webcam to recognize hand gestures and control the Mixed 
    - About: About window (tray only)
    - Quit: Quit this program (tray only)
 
-4. **Run Falcon BMS as usual**
+3. **Run Falcon BMS as usual**
 
-5. **Hand Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** That's all.
+4. **Hand Gesture in front of the Webcam to Toggle MR within BMS VR cockpit:** That's all.
 
 ## Tips
 
