@@ -9,7 +9,6 @@ from PIL import Image, ImageTk, ImageDraw
 import pystray
 import time
 
-
 class GestureMR4BMSApp:
 
     def __init__(self, root):
@@ -32,7 +31,7 @@ class GestureMR4BMSApp:
         self.threshold_y = 0.5
         self.detection_mode = 0
 
-        self.MR_WATERMARK = 5   # MR Cover On Watermark
+        self.MR_HIGH_WATERMARK = 5   # MR Cover On Watermark
         self.mr_cover_watermark = 0
         
         self.cap = cv2.VideoCapture(0)
@@ -69,22 +68,28 @@ class GestureMR4BMSApp:
         self.combobox.bind("<<ComboboxSelected>>", self.on_option_select)
         self.combobox.pack(side=tk.LEFT, padx=5)
 
-        self.mode_label = tk.Label(self.button_frame, text="witin Area:")
-        self.mode_label.pack(side=tk.LEFT, padx=5)
-
-        self.threshold_slider = tk.Scale(self.button_frame, from_=0, to=100, orient=tk.HORIZONTAL, command=self.on_update_threshold, showvalue=False)
-        self.threshold_slider.set(self.threshold_y * 100)
-        self.threshold_slider.pack(side=tk.LEFT, padx=5)
-
         self.toggle_feed_var = tk.BooleanVar()
         self.toggle_feed_switch = tk.Checkbutton(self.button_frame, text="View Webcam Feed", variable=self.toggle_feed_var, command=self.on_update_feed)
         self.toggle_feed_switch.pack(side=tk.LEFT, padx=5)
 
         self.button_frame.pack(side=tk.TOP, fill=tk.X)
 
-        self.video_label = tk.Label(root)
-        self.video_label.pack(pady=10)
-            
+        # Create a frame to contain video label and the vertical slider 
+        self.frame2 = tk.Frame(root)
+        self.frame2.pack(padx=0)
+
+        self.video_label = tk.Label(self.frame2)
+        self.video_label.pack(side=tk.LEFT, padx=0)
+
+        self.threshold_slider_y = tk.Scale(self.frame2, from_=0, to=100, orient=tk.VERTICAL, command=self.on_update_threshold_y, showvalue=False, length=480)
+        self.threshold_slider_y.set(self.threshold_y * 100)
+        self.threshold_slider_y.pack(side=tk.LEFT, padx=0)
+
+        self.frame2.pack(side=tk.TOP, fill=tk.X)
+        
+        self.threshold_slider_x = tk.Scale(self.root, from_=0, to=50, orient=tk.HORIZONTAL, command=self.on_update_threshold_x, showvalue=False, length=640)
+        self.threshold_slider_x.set(self.threshold_x * 100)
+        self.threshold_slider_x.pack(side=tk.LEFT, pady=0)
         
     # Function to toggle MR cover (replace with actual implementation)
     def mr_cover_on(self):
@@ -100,11 +105,12 @@ class GestureMR4BMSApp:
         self.keyboard.release(Key.shift)
 
     def detect_hand(self):
-        global running, show_feed, threshold_y, mr_cover_watermark
-        global toogle_feed_var, detection_mode
+        #global running, show_feed, threshold_y, mr_cover_watermark
+        #global toogle_feed_var, detection_mode
 
         ret, frame = self.cap.read()
         if not ret:
+            messagebox.showinfo("Alert", "Failed to open camera..")
             return
 
         # Get frame dimensions
@@ -128,9 +134,9 @@ class GestureMR4BMSApp:
                     landmarks = landmarks + 1
                     if self.mr_cover_watermark == 0:                   # Immediate mr_cover_watermark on as soon as any hands detected
                         self.mr_cover_on()
-                        self.video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}", image='')
+                        self.video_label.config(text=f"Hand detected at x: {wrist.x:.2f}, y: {wrist.y:.2f}, z: {wrist.z:.2f}")
                         
-                    self.mr_cover_watermark = self.MR_WATERMARK             # high watermark immediately, when any hands detected
+                    self.mr_cover_watermark = self.MR_HIGH_WATERMARK             # high watermark immediately, when any hands detected
 
                     if self.show_feed:
                         self.mp_drawing.draw_landmarks(frame, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
@@ -142,11 +148,11 @@ class GestureMR4BMSApp:
             # mr_cover_watermark off after some delay to prevent hand detection noise
             if self.mr_cover_watermark == 1:
                 self.mr_cover_off()
-                self.video_label.config(text="No hand detected", image='')
+                self.video_label.config(text="No hand detected")
 
         if self.show_feed:
             # Draw detection area on the frame
-            cv2.rectangle(frame, (0, int(self.threshold_y * frame_height)), (frame_width, frame_height), (0, 255, 0), 3)
+            cv2.rectangle(frame, (int(self.threshold_x * frame_width), int(self.threshold_y * frame_height)), (int((1-self.threshold_x) * frame_width), frame_height), (0, 255, 0), 3)
 
             # Update the Tkinter label with the new frame
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -155,14 +161,14 @@ class GestureMR4BMSApp:
             self.video_label.configure(image=imgtk)
             
         if self.running:
-            self.root.after(100, self.detect_hand)
+            self.root.after(200, self.detect_hand)
 
     def on_start_detection(self):
         if self.running == False:
             self.running = True
 
             self.start_stop_button.config(text="\u25A0", command=self.on_stop_detection)
-            self.video_label.config(text="Detecting", image='')
+            self.update_ROI()
 
             self.detect_hand()        
 
@@ -170,26 +176,47 @@ class GestureMR4BMSApp:
         if self.running == True:
             self.running = False
 
-            self.video_label.config(text="Stopped", image='')
+            self.update_ROI()
             self.start_stop_button.config(text="\u25B6", command=self.on_start_detection)
 
-    def create_image(self):
+    def create_roi_image(self, is_tray):
         # Generate an image to use as the icon
-        width = 64
-        height = 64
-        image = Image.new('RGB', (width, height), "white")
+        frame_width = 640
+        frame_height = 480
+        status_size = 100
+        image = Image.new('RGB', (frame_width, frame_height), "white")
+        
         dc = ImageDraw.Draw(image)
-        dc.rectangle((width // 4, height // 4, 3 * width // 4, 3 * height // 4), fill="black")
+        
+        dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", fill="limegreen", width=5)
+        if is_tray:
+            if self.running:
+                dc.ellipse((frame_width/2-status_size, frame_height/2-status_size, frame_width/2+status_size, frame_height/2+status_size), fill="red")
+            else:
+                dc.rectangle((frame_width/2-status_size, frame_height/2-status_size, frame_width/2+status_size, frame_height/2+status_size), fill="black")
+        else:
+            if self.running:
+                dc.text((10,10), "Detecting...", fill="red")
+            else:
+                dc.text((10,10), "Stopped.", fill="black")
         return image
 
+    def update_ROI(self):
+        if self.show_feed == False:
+            image = self.create_roi_image(False)
+            imgtk = ImageTk.PhotoImage(image=image)
+            self.video_label.imgtk = imgtk
+            self.video_label.configure(image=imgtk)
+
     def on_tray_start_stop(self, item):
-       
         if self.running == False:
             self.on_start_detection()
             self.tray_start_stop = "\u25A0 Stop"
         else:
             self.on_stop_detection()
             self.tray_start_stop = "\u25B6 Start"
+        
+        self.icon.icon = self.create_roi_image(True)
 
     def on_tray_quit(self, item):
         self.on_stop_detection()
@@ -205,7 +232,7 @@ class GestureMR4BMSApp:
         self.root.after(0, self.root.deiconify)
 
     def on_hide_window(self, event=None):
-        global tray_start_stop, running
+        # global tray_start_stop, running
         
         if self.root.state() == 'withdrawn':
             return
@@ -219,21 +246,27 @@ class GestureMR4BMSApp:
 
         self.tray_menu = pystray.Menu(
             pystray.MenuItem(lambda text: self.tray_start_stop, self.on_tray_start_stop),
-            pystray.MenuItem('Show', self.on_show_window),
+            pystray.MenuItem('Configure...', self.on_show_window),
             pystray.MenuItem('About', self.on_show_about),
             pystray.MenuItem('Quit', self.on_tray_quit))
             
-        image = self.create_image()
+        image = self.create_roi_image(True)
         self.icon = pystray.Icon("GestureMR4BMS", image, "GestureMR4BMS", self.tray_menu)
         
         threading.Thread(target=self.icon.run).start()
 
-    def on_update_threshold(self, value):
-        self.threshold_y = float(value) / 100
+    def on_update_threshold_x(self, value):
+        self.threshold_x = float(value) / 100
+        self.update_ROI()
 
+    def on_update_threshold_y(self, value):
+        self.threshold_y = float(value) / 100
+        self.update_ROI()
+        
     def on_update_feed(self):
         self.show_feed = self.toggle_feed_var.get()
-        self.video_label.config(text="", image="")
+        
+        self.update_ROI()
 
     # Function to handle the selection of an option
     def on_option_select(self, event):
@@ -246,7 +279,7 @@ class GestureMR4BMSApp:
         self.root.quit()
 
     def on_show_about(self):
-        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.2\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.3\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
 
 if __name__ == "__main__":
     # Tkinter GUI setup
@@ -254,8 +287,9 @@ if __name__ == "__main__":
 
     app = GestureMR4BMSApp(root)
 
-
     root.protocol('WM_DELETE_WINDOW', app.on_quit_program)
     root.bind("<Unmap>", app.on_hide_window)
+    
+    app.on_start_detection()
 
     root.mainloop()
