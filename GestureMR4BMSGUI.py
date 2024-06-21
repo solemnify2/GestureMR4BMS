@@ -10,7 +10,6 @@ import pystray
 import time
 
 class GestureMR4BMSApp:
-
     def __init__(self, root):
         self.root = root
 
@@ -33,9 +32,7 @@ class GestureMR4BMSApp:
 
         self.MR_HIGH_WATERMARK = 5   # MR Cover On Watermark
         self.mr_cover_watermark = 0
-        
-        self.cap = cv2.VideoCapture(0)
-        
+   
         self.label = tk.Label(root)
         self.label.pack()
         
@@ -91,6 +88,7 @@ class GestureMR4BMSApp:
         self.threshold_slider_x.set(self.threshold_x * 100)
         self.threshold_slider_x.pack(side=tk.LEFT, pady=0)
         
+        
     # Function to toggle MR cover (replace with actual implementation)
     def mr_cover_on(self):
         self.keyboard.press(Key.shift)
@@ -110,7 +108,8 @@ class GestureMR4BMSApp:
 
         ret, frame = self.cap.read()
         if not ret:
-            messagebox.showinfo("Alert", "Failed to open camera..")
+            # messagebox.showinfo("Alert", "Failed to read camera..\nDetection stopped.")
+            self.on_stop_detection()
             return
 
         # Get frame dimensions
@@ -165,19 +164,26 @@ class GestureMR4BMSApp:
 
     def on_start_detection(self):
         if self.running == False:
-            self.running = True
+            
+            self.cap = cv2.VideoCapture(0)
+            if self.cap.isOpened():
+                self.running = True
 
-            self.start_stop_button.config(text="\u25A0", command=self.on_stop_detection)
-            self.update_ROI()
+                self.start_stop_button.config(text="\u25A0", command=self.on_stop_detection)
+                self.update_ROI()
 
-            self.detect_hand()        
+                self.detect_hand()
+            else:
+                messagebox.showinfo("Error", "Failed to open camera..")
 
     def on_stop_detection(self):
         if self.running == True:
             self.running = False
-
+            
             self.update_ROI()
             self.start_stop_button.config(text="\u25B6", command=self.on_start_detection)
+            
+            self.cap.release()
 
     def create_roi_image(self, is_tray):
         # Generate an image to use as the icon
