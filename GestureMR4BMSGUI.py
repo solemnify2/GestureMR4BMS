@@ -8,6 +8,30 @@ from tkinter import messagebox
 from PIL import Image, ImageTk, ImageDraw
 import pystray
 import time
+import sys
+import os
+import winreg
+
+# Constants
+REG_PATH = r"Software\GestureMR4BMS"
+
+def set_reg(name, value):
+    try:
+        registry_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, REG_PATH)
+        winreg.SetValueEx(registry_key, name, 0, winreg.REG_SZ, str(value))
+        winreg.CloseKey(registry_key)
+        return True
+    except WindowsError:
+        return False
+
+def get_reg(name):
+    try:
+        registry_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, REG_PATH, 0, winreg.KEY_READ)
+        value, regtype = winreg.QueryValueEx(registry_key, name)
+        winreg.CloseKey(registry_key)
+        return value
+    except WindowsError:
+        return None
 
 class GestureMR4BMSApp:
     def __init__(self, root):
@@ -25,10 +49,7 @@ class GestureMR4BMSApp:
         self.show_feed = False
         self.tray_start_stop = ""
 
-        # Variable for threshold
-        self.threshold_x = 0
-        self.threshold_y = 0.5
-        self.detection_mode = 0
+        self.load_config()
 
         self.MR_HIGH_WATERMARK = 5   # MR Cover On Watermark
         self.mr_cover_watermark = 0
@@ -61,13 +82,21 @@ class GestureMR4BMSApp:
         # Create a Combobox with detection modes
         options = ["wrist only", "any parts of hand", "all parts of hand"]
         self.combobox = ttk.Combobox(self.button_frame, textvariable=self.option_var, values=options, state='readonly')
-        self.combobox.current(0)  # Set the default value to the first option
+        self.combobox.current(self.detection_mode)  # Set the default value to the first option
         self.combobox.bind("<<ComboboxSelected>>", self.on_option_select)
         self.combobox.pack(side=tk.LEFT, padx=5)
 
         self.toggle_feed_var = tk.BooleanVar()
         self.toggle_feed_switch = tk.Checkbutton(self.button_frame, text="View Webcam Feed", variable=self.toggle_feed_var, command=self.on_update_feed)
         self.toggle_feed_switch.pack(side=tk.LEFT, padx=5)
+
+        self.toggle_autostart_var = tk.BooleanVar(value=self.autostart)
+        self.toggle_autostart_switch = tk.Checkbutton(self.button_frame, text="Auto Start", variable=self.toggle_autostart_var, command=self.on_update_autostart)
+        self.toggle_autostart_switch.pack(side=tk.LEFT, padx=5)
+
+        self.toggle_runmin_var = tk.BooleanVar(value=self.runmin)
+        self.toggle_runmin_switch = tk.Checkbutton(self.button_frame, text="Run Minimized", variable=self.toggle_runmin_var, command=self.on_update_runmin)
+        self.toggle_runmin_switch.pack(side=tk.LEFT, padx=5)
 
         self.button_frame.pack(side=tk.TOP, fill=tk.X)
 
@@ -88,6 +117,36 @@ class GestureMR4BMSApp:
         self.threshold_slider_x.set(self.threshold_x * 100)
         self.threshold_slider_x.pack(side=tk.LEFT, pady=0)
         
+    def save_config(self):
+        set_reg("threshold_x", str(self.threshold_x*100))
+        set_reg("threshold_y", str(self.threshold_y*100))
+        set_reg("mode", str(self.detection_mode))
+        set_reg("autostart", "true" if self.autostart else "false")
+        set_reg("runmin", "true" if self.runmin else "false")
+
+    def load_config(self):
+        #default values
+        self.threshold_x = 0
+        self.threshold_y = 0.5
+        self.detection_mode = 0
+        self.autostart = False
+        self.runmin = False
+        
+        value = get_reg("threshold_x")
+        if value != None:
+            self.threshold_x = float(value)/100
+        value = get_reg("threshold_y")
+        if value != None:
+            self.threshold_y = float(value)/100
+        value = get_reg("mode")
+        if value != None:
+            self.detection_mode = int(value)
+        value = get_reg("autostart")
+        if value != None:
+            self.autostart = value.lower() in ('true', '1', 't', 'y', 'yes')
+        value = get_reg("runmin")
+        if value != None:
+            self.runmin = value.lower() in ('true', '1', 't', 'y', 'yes')
         
     # Function to toggle MR cover (replace with actual implementation)
     def mr_cover_on(self):
@@ -263,10 +322,12 @@ class GestureMR4BMSApp:
 
     def on_update_threshold_x(self, value):
         self.threshold_x = float(value) / 100
+        self.save_config()
         self.update_ROI()
 
     def on_update_threshold_y(self, value):
         self.threshold_y = float(value) / 100
+        self.save_config()
         self.update_ROI()
         
     def on_update_feed(self):
@@ -274,12 +335,23 @@ class GestureMR4BMSApp:
         
         self.update_ROI()
 
+    def on_update_autostart(self):
+        self.autostart = self.toggle_autostart_var.get()
+        self.save_config()
+
+    def on_update_runmin(self):
+        self.runmin = self.toggle_runmin_var.get()
+        self.save_config()
+
     # Function to handle the selection of an option
     def on_option_select(self, event):
         self.detection_mode = self.combobox['values'].index(self.combobox.get())
+        self.save_config()
         
     def on_quit_program(self):
         self.on_stop_detection()
+
+        app.save_config()
 
         print("quit")
         self.root.quit()
@@ -296,6 +368,10 @@ if __name__ == "__main__":
     root.protocol('WM_DELETE_WINDOW', app.on_quit_program)
     root.bind("<Unmap>", app.on_hide_window)
     
-    app.on_start_detection()
+    if app.autostart == True:
+        app.on_start_detection()
+
+    if app.runmin == True:
+        app.on_hide_window()
 
     root.mainloop()
