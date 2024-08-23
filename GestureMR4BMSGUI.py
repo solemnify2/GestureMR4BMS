@@ -104,22 +104,27 @@ class GestureMR4BMSApp:
         self.frame2 = tk.Frame(root)
         self.frame2.pack(padx=0)
 
-        self.video_label = tk.Label(self.frame2)
-        self.video_label.pack(side=tk.LEFT, padx=0)
-
         self.threshold_slider_y = tk.Scale(self.frame2, from_=0, to=100, orient=tk.VERTICAL, command=self.on_update_threshold_y, showvalue=False, length=480)
         self.threshold_slider_y.set(self.threshold_y * 100)
         self.threshold_slider_y.pack(side=tk.LEFT, padx=0)
+
+        self.video_label = tk.Label(self.frame2)
+        self.video_label.pack(side=tk.LEFT, padx=0)
+
+        self.threshold_slider_y2 = tk.Scale(self.frame2, from_=0, to=100, orient=tk.VERTICAL, command=self.on_update_threshold_y2, showvalue=False, length=480)
+        self.threshold_slider_y2.set(self.threshold_y2 * 100)
+        self.threshold_slider_y2.pack(side=tk.LEFT, padx=0)
 
         self.frame2.pack(side=tk.TOP, fill=tk.X)
         
         self.threshold_slider_x = tk.Scale(self.root, from_=0, to=50, orient=tk.HORIZONTAL, command=self.on_update_threshold_x, showvalue=False, length=640)
         self.threshold_slider_x.set(self.threshold_x * 100)
-        self.threshold_slider_x.pack(side=tk.LEFT, pady=0)
+        self.threshold_slider_x.pack(side=tk.BOTTOM, pady=0)
         
     def save_config(self):
         set_reg("threshold_x", str(self.threshold_x*100))
         set_reg("threshold_y", str(self.threshold_y*100))
+        set_reg("threshold_y2", str(self.threshold_y2*100))
         set_reg("mode", str(self.detection_mode))
         set_reg("autostart", "true" if self.autostart else "false")
         set_reg("runmin", "true" if self.runmin else "false")
@@ -128,6 +133,7 @@ class GestureMR4BMSApp:
         #default values
         self.threshold_x = 0
         self.threshold_y = 0.5
+        self.threshold_y2 = 0.4
         self.detection_mode = 0
         self.autostart = False
         self.runmin = False
@@ -138,6 +144,9 @@ class GestureMR4BMSApp:
         value = get_reg("threshold_y")
         if value != None:
             self.threshold_y = float(value)/100
+        value = get_reg("threshold_y2")
+        if value != None:
+            self.threshold_y2 = float(value)/100
         value = get_reg("mode")
         if value != None:
             self.detection_mode = int(value)
@@ -187,8 +196,11 @@ class GestureMR4BMSApp:
                 # detectio option) Select one of the followings that you prefer
                 # Opt1) Check if the whole hand is in the specified area of the screen
                 if (self.detection_mode == 0 and wrist.x > self.threshold_x and wrist.x < 1 - self.threshold_x and wrist.y > self.threshold_y) or \
+                   (self.detection_mode == 0 and wrist.y > self.threshold_y2) or \
                    (self.detection_mode == 1 and any(landmark.x > self.threshold_x and landmark.x < 1 - self.threshold_x and landmark.y > self.threshold_y for landmark in hand_landmarks.landmark)) or \
-                   (self.detection_mode == 2 and all(landmark.x > self.threshold_x and landmark.x < 1 - self.threshold_x and landmark.y > self.threshold_y for landmark in hand_landmarks.landmark)):
+                   (self.detection_mode == 1 and any(landmark.y > self.threshold_y2 for landmark in hand_landmarks.landmark)) or \
+                   (self.detection_mode == 2 and all(landmark.x > self.threshold_x and landmark.x < 1 - self.threshold_x and landmark.y > self.threshold_y for landmark in hand_landmarks.landmark)) or \
+                   (self.detection_mode == 2 and all(landmark.y > self.threshold_y2 for landmark in hand_landmarks.landmark)):
                     landmarks = landmarks + 1
                     if self.mr_cover_watermark == 0:                   # Immediate mr_cover_watermark on as soon as any hands detected
                         self.mr_cover_on()
@@ -211,6 +223,7 @@ class GestureMR4BMSApp:
         if self.show_feed:
             # Draw detection area on the frame
             cv2.rectangle(frame, (int(self.threshold_x * frame_width), int(self.threshold_y * frame_height)), (int((1-self.threshold_x) * frame_width), frame_height), (0, 255, 0), 3)
+            cv2.rectangle(frame, (0, int(self.threshold_y2 * frame_height), frame_width, frame_height), (0, 255, 0), 3)
 
             # Update the Tkinter label with the new frame
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -219,7 +232,7 @@ class GestureMR4BMSApp:
             self.video_label.configure(image=imgtk)
             
         if self.running:
-            self.root.after(200, self.detect_hand)
+            self.root.after(100, self.detect_hand)
 
     def on_start_detection(self):
         if self.running == False:
@@ -253,7 +266,10 @@ class GestureMR4BMSApp:
         
         dc = ImageDraw.Draw(image)
         
-        dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", fill="limegreen", width=5)
+#        dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", fill="limegreen", width=5)
+#        dc.rectangle((0, int(self.threshold_y2 * frame_height), frame_width, frame_height), outline="green", fill="limegreen", width=5)
+        dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", width=5)
+        dc.rectangle((0, int(self.threshold_y2 * frame_height), frame_width, frame_height), outline="green", width=5)
         if is_tray:
             if self.running:
                 dc.ellipse((frame_width/2-status_size, frame_height/2-status_size, frame_width/2+status_size, frame_height/2+status_size), fill="red")
@@ -330,6 +346,11 @@ class GestureMR4BMSApp:
         self.save_config()
         self.update_ROI()
         
+    def on_update_threshold_y2(self, value):
+        self.threshold_y2 = float(value) / 100
+        self.save_config()
+        self.update_ROI()
+        
     def on_update_feed(self):
         self.show_feed = self.toggle_feed_var.get()
         
@@ -357,7 +378,7 @@ class GestureMR4BMSApp:
         self.root.quit()
 
     def on_show_about(self):
-        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.3\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
+        messagebox.showinfo("About", "GestureMR4BMS Version 0.2.8\n\nCopyright (C) 2024 Hong Yeon Kim\n\nFor more information, visit: https://github.com/solemnify2/GestureMR4BMS")
 
 if __name__ == "__main__":
     # Tkinter GUI setup
