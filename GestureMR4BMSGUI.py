@@ -117,7 +117,7 @@ class GestureMR4BMSApp:
 
         self.frame2.pack(side=tk.TOP, fill=tk.X)
         
-        self.threshold_slider_x = tk.Scale(self.root, from_=0, to=50, orient=tk.HORIZONTAL, command=self.on_update_threshold_x, showvalue=False, length=640)
+        self.threshold_slider_x = tk.Scale(self.root, from_=0, to=100, orient=tk.HORIZONTAL, command=self.on_update_threshold_x, showvalue=False, length=640)
         self.threshold_slider_x.set(self.threshold_x * 100)
         self.threshold_slider_x.pack(side=tk.BOTTOM, pady=0)
         
@@ -140,7 +140,10 @@ class GestureMR4BMSApp:
         
         value = get_reg("threshold_x")
         if value != None:
-            self.threshold_x = float(value)/100
+            if float(value) > 50:
+                self.threshold_x = (100 - float(value))/100
+            else:
+                self.threshold_x = float(value)/100
         value = get_reg("threshold_y")
         if value != None:
             self.threshold_y = float(value)/100
@@ -171,12 +174,8 @@ class GestureMR4BMSApp:
         self.keyboard.release(Key.shift)
 
     def detect_hand(self):
-        #global running, show_feed, threshold_y, mr_cover_watermark
-        #global toogle_feed_var, detection_mode
-
         ret, frame = self.cap.read()
         if not ret:
-            # messagebox.showinfo("Alert", "Failed to read camera..\nDetection stopped.")
             self.on_stop_detection()
             return
 
@@ -266,8 +265,6 @@ class GestureMR4BMSApp:
         
         dc = ImageDraw.Draw(image)
         
-#        dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", fill="limegreen", width=5)
-#        dc.rectangle((0, int(self.threshold_y2 * frame_height), frame_width, frame_height), outline="green", fill="limegreen", width=5)
         dc.rectangle((int(self.threshold_x * frame_width), int(self.threshold_y * frame_height), int((1-self.threshold_x) * frame_width), frame_height), outline="green", width=5)
         dc.rectangle((0, int(self.threshold_y2 * frame_height), frame_width, frame_height), outline="green", width=5)
         if is_tray:
@@ -337,7 +334,10 @@ class GestureMR4BMSApp:
         threading.Thread(target=self.icon.run).start()
 
     def on_update_threshold_x(self, value):
-        self.threshold_x = float(value) / 100
+        if float(value) > 50:
+            self.threshold_x = (100-float(value)) / 100        
+        else:
+            self.threshold_x = float(value) / 100        
         self.save_config()
         self.update_ROI()
 
